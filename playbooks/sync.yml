@@ -1,0 +1,17 @@
+- name: Populate the RHOS Release
+  hosts: localhost
+  tasks:
+    vars_prompt:
+      - name: "release_version"
+        prompt: "Product release version"
+        default: "2017-06-19.1"
+
+- name: Install rhos-release from rpm
+  hosts: undercloud
+  tasks:
+    - name: run rpm to install rhos-release from url
+      command: yum localinstall -y http://download.lab.bos.redhat.com/rcm-guest/puddles/OpenStack/rhos-release/rhos-release-latest.noarch.rpm
+      become: yes
+
+
+
