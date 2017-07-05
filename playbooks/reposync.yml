@@ -28,7 +28,12 @@
         rhelosp-rhel-7.4-ha
         rhelosp-rhel-7.4-server
 
+    - name: create the http dir fro repomod
+      file:
+        path: /var/www/html/{{ puddle_id }}
+        state: directory
+
     - name: run create repo on the puddle
-      command: createrepo -o puddle-{{ puddle_id }}
+      command: createrepo -o {{ puddle_id }} puddle-{{ puddle_id }}
       args:
         chdir: /var/www/html/
