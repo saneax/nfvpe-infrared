@@ -1,0 +1,27 @@
+---
+- name: Reposync on the host
+  hosts: localhost
+  tasks:
+    - name: install rhos-release
+      yum:
+        name: http://download.lab.bos.redhat.com/rcm-guest/puddles/OpenStack/rhos-release/rhos-release-latest.noarch.rpm
+        state: present
+
+    - name: Run rhos-release with the puddle
+      command: rhos-release 12 -p {{ puddle-id }}
+
+    - name: make the puddle dir
+      file: /var/www/html/puddle-{{ puddle-id }}
+
+    - name: run the reposync
+      command: reposync -r {{ item }} -n -p /var/www/html/puddle-{{ puddle-id }}
+      with_items:
+        rhelosp-12.0-puddle
+        rhelosp-rhel-7.4-extras
+        rhelosp-rhel-7.4-ha
+        rhelosp-rhel-7.4-server
+
+    - name: run create repo on the puddle
+      command: createrepo -o puddle-{{ puddle-id }}
+      args:
+        chdir: /var/www/html/
