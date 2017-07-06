@@ -24,6 +24,7 @@
         rhelosp-rhel-7.4-extras
         rhelosp-rhel-7.4-ha
         rhelosp-rhel-7.4-server
+        openvswitch-2.6
 
     - name: run the reposync
       command: reposync -r {{ item }} -n -p /var/www/html/puddle/{{ item }}
@@ -32,6 +33,7 @@
         rhelosp-rhel-7.4-extras
         rhelosp-rhel-7.4-ha
         rhelosp-rhel-7.4-server
+        openvswitch-2.6
 
     - name: run create repo on the puddle
       command: createrepo -o puddle puddle
