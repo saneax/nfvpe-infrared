@@ -17,23 +17,30 @@
 
     - name: make the puddle dir
       file: 
-        path: /var/www/html/puddle-{{ puddle_id }}
+        path: /var/www/html/{{ item }}
         state: directory
-
-    - name: run the reposync
-      command: reposync -r {{ item }} -n -p /var/www/html/puddle-{{ puddle_id }}
       with_items:
         rhelosp-12.0-puddle
         rhelosp-rhel-7.4-extras
         rhelosp-rhel-7.4-ha
         rhelosp-rhel-7.4-server
 
+    - name: run the reposync
+      command: reposync -r {{ item }} -n -p /var/www/html/puddle/{{ item }}
+      with_items:
+        rhelosp-12.0-puddle
+        rhelosp-rhel-7.4-extras
+        rhelosp-rhel-7.4-ha
+        rhelosp-rhel-7.4-server
+
+    - name: run create repo on the puddle
+      command: createrepo -o puddle puddle
+      args:
+        chdir: /var/www/html/
+
     - name: create the http dir fro repomod
       file:
         path: /var/www/html/{{ puddle_id }}
         state: directory
 
-    - name: run create repo on the puddle
-      command: createrepo -o {{ puddle_id }} puddle-{{ puddle_id }}
-      args:
-        chdir: /var/www/html/
+
